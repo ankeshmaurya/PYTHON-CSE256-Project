@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>NeuroGrid Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        async function fetchData() {
+            let response = await fetch("/data");
+            let data = await response.json();
+            let table = "<table><tr><th>Timestamp</th><th>Temperature (°C)</th><th>Humidity (%)</th><th>Energy Usage (W)</th><th>Anomaly</th></tr>";
+            
+            data.forEach(row => {
+                let anomalyClass = row.Anomaly === -1 ? "class='anomaly'" : "";
+                table += `<tr>
+                    <td>${row.Timestamp}</td>
+                    <td>${row.Temperature}</td>
+                    <td>${row.Humidity}</td>
+                    <td>${row.EnergyUsage}</td>
+                    <td ${anomalyClass}>${row.Anomaly === -1 ? "⚠️ Alert!" : "Normal"}</td>
+                </tr>`;
+            });
+
+            table += "</table>";
+            document.getElementById("data-table").innerHTML = table;
+        }
+
+        window.onload = fetchData;
+    </script>
+</head>
+<body>
+    <h1>🔋 NeuroGrid Energy Monitoring Dashboard</h1>
+    <div class="container">
+        <p>Live electricity usage and anomaly alerts.</p>
+        <button onclick="fetchData()">Refresh Data</button>
+        <div id="data-table"></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+pandas
+numpy
+tensorflow
+flask
+sklearn
+twilio
+smtplib
